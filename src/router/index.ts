@@ -11,8 +11,8 @@ const router = createRouter({
             path: '/',
             name: 'home',
             component: HomeView,
-            meta:{
-                auth:true
+            meta: {
+                auth: true
             }
         },
         {
@@ -29,21 +29,24 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
+
     const isLoggedIn = await isUserLoggedIn();
 
     if (to.name !== 'auth-login' && !isLoggedIn) {
-        if (!to.meta.auth) {
-            return next()
-        }
 
-        return next({ name: 'auth-login' })
+        if (!to.meta.auth) {
+            return next();
+        }
+        return next({ name: 'auth-login' });
     }
-    else if (to.name === 'auth-login' || to.name ==='auth-register' && isLoggedIn) {
-        return next({ name: 'home' })
+    else if (to.name === 'auth-login' && isLoggedIn) {
+        return next({ name: 'home' });
     }
     else {
-        next()
+        next();
     }
+
+
 })
 
 export default router   
